@@ -5,7 +5,7 @@ import {
   setCurrentPage,
   setPrevPage,
   setNextPage,
-} from "../../store/post-slice";
+} from "../../store/reducers/post-slice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import createPages from "../../logic/create-pages";
 

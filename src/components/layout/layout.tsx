@@ -13,10 +13,10 @@ function Layout() {
           </div>
           <div>
             <button className="header_btn" type="button">
-              Sign In
+              <Link to="sign-in">Sign In</Link>
             </button>
             <button className="header_btn" type="button">
-              Sign Up
+              <Link to="sign-up">Sign Up</Link>
             </button>
           </div>
         </menu>

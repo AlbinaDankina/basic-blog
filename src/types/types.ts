@@ -30,3 +30,35 @@ export type InitialState = {
   status: string | null;
   error: unknown | null;
 };
+
+export type FormValues = {
+  Username: string | null;
+  Email: string | null;
+  password: string | null;
+  token: string | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  isLoggedIn: boolean;
+  error: unknown | null;
+  consent?: boolean;
+};
+
+export type SignupType = {
+  Username?: string | null;
+  Email: string | null;
+  password: string | null;
+  token?: string | null;
+};
+
+export type NewUser = {
+  user: {
+    email: string;
+    token: string;
+    username: string;
+    bio: string;
+    image: string;
+  };
+};
+
+export type MyKnownError = {
+  errorMessage: string;
+};

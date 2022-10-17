@@ -1,11 +1,15 @@
+import uniqid from "uniqid";
 import ReactMarkdown from "react-markdown";
 import { useAppSelector } from "../../store/hooks";
 
 function ArticleContent() {
   const article = useAppSelector((state) => state.posts.article);
   const tagUnit = article?.tagList.map((el) => (
-    <div className="articles_item-content-tags-item">{el}</div>
+    <div key={uniqid()} className="articles_item-content-tags-item">
+      {el}
+    </div>
   ));
+  if (!article?.updatedAt) return null;
   const year = new Date(article!.updatedAt).getFullYear();
   const day = new Date(article!.updatedAt).getDate();
   const month = new Date(article!.updatedAt).toLocaleString("default", {

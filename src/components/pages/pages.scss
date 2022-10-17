@@ -1,3 +1,4 @@
+// вид поста в списке постов
 .articles_item {
     background: #FFFFFF;
     display: flex;
@@ -98,6 +99,7 @@
   }
 }
 
+// not-found-page
 .notfound {
   width: 320px;
   color: white;
@@ -106,6 +108,7 @@
   margin: 30px auto;
 }
 
+// страница с постом
 .article {
     max-width: 941px;
     margin: 0 auto;
@@ -129,4 +132,136 @@
         flex-direction: column;
       }
     }
+}
+
+// страница входа
+.entry_container {
+  background-color: gray;
+  height: 100vh;
+}
+.entry_block {
+
+  &-wrapper {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    margin: 20px auto;
+}
+
+  &-header {
+      font-family: Roboto;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 28px;
+      letter-spacing: 0em;
+      text-align: center;
+    }
+
+    p {
+      font-family: Roboto;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0em;
+      text-align: center;
+      color: #8C8C8C;
+      padding-top: 8px;
+    }
+}
+
+.label {
+  font-family: Roboto;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  line-height: 22px;
+  position: relative;
+
+  &_error {
+    height: 15px;
+    color: #F5222D;
+    font-size: 14px;
+                
+    p {
+    color: red;
+    position: absolute;
+    top: 4.5em;
+    line-height: 12px;
+    text-align: start;
+  }}
+}
+
+// чекбокс согласия на обработку перс-х данных
+.label_concent {
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  margin: 8px auto;
+
+    &-text {
+      margin-left: 10px;
+      padding-left: 20px;
+  }
+
+  &-checkbox {
+    position:absolute;
+    width: 1.2em;
+    height: 1.2em;
+    outline: 1px solid #1890FF;
+    border-radius: 2px;
+    margin-left: -260px;
+    margin-top: 2px;
+  }
+
+  &-input {
+  position: absolute;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+}
+
+.label_concent-input:checked + .label_concent-checkbox {
+  background-image: url("./no-label.png");
+}
+
+.input {
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+  color: #BFBFBF;
+}
+
+// кнопка подтверждения формы
+.btn {  
+  padding: 8px 16px;
+  background: #1890FF;    
+  border-radius: 4px;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+
+@media (max-width: 390px) {
+
+  .article {
+    margin-right: 15px;
+    margin-left: 1px;
+  }
+
+  .entry_block {
+    &-wrapper {
+      width: 280px;
+      margin: 20px auto;
+    }
+  }
 }

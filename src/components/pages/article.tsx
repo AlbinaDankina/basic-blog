@@ -1,10 +1,11 @@
+import uniqid from "uniqid";
 import "./pages.scss";
 import { Link } from "react-router-dom";
-import { ArticleType } from "../types/types";
+import { ArticleType } from "../../types/types";
 // import ReactMarkdown from "react-markdown";
 import { truncate } from "../../logic/truncate-text";
 import { useAppDispatch } from "../../store/hooks";
-import { fetchArticle } from "../../store/post-slice";
+import { fetchArticle } from "../../store/reducers/post-slice";
 
 function Article({ item }: { item: ArticleType }) {
   const dispatch = useAppDispatch();
@@ -16,7 +17,9 @@ function Article({ item }: { item: ArticleType }) {
   });
 
   const tagUnit = item.tagList.map((el) => (
-    <div className="articles_item-content-tags-item">{el}</div>
+    <div key={uniqid()} className="articles_item-content-tags-item">
+      {el}
+    </div>
   ));
 
   return (
@@ -24,7 +27,7 @@ function Article({ item }: { item: ArticleType }) {
       <div className="articles_item-content">
         <div className="articles_item-content-header">
           <Link
-            to={item.slug}
+            to={`articles/${item.slug}`}
             onClick={() => dispatch(fetchArticle(item.slug))}
           >
             <h2>{item.title}</h2>
