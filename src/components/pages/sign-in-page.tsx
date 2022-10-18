@@ -1,5 +1,8 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
 import { Link, useNavigate } from "react-router-dom";
+import { Alert } from "antd";
+import "antd/dist/antd.min.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { loginUser } from "../../store/reducers/user-slice";
@@ -7,21 +10,23 @@ import { SignupType } from "../../types/types";
 
 function SignIn() {
   const dispatch = useAppDispatch();
+  const status = useAppSelector((state) => state.user.status);
   const navigate = useNavigate();
-  const token = useAppSelector((state) => state.user.token);
+  const token = JSON.parse(localStorage.getItem("token")!);
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     reset,
   } = useForm<SignupType>({
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   // производим запрос на проверку регистрационных данных и если все ок, то навигируем пользователя на залогиненную гл страницу
   const onSubmit: SubmitHandler<SignupType> = ({ Email, password }) => {
     dispatch(loginUser({ Email, password, token }));
-    navigate("/");
+    if (status === "succeeded") navigate("/");
+    if (status === "failed") navigate("/sign-in");
     reset();
   };
 
@@ -34,12 +39,19 @@ function SignIn() {
             Email address
             <input
               {...register("Email", {
-                required: true,
+                required: "необходимо заполнить",
+                minLength: 6,
                 pattern: {
                   value: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
                   message: "email должен быть корректным почтовым адресом",
                 },
               })}
+              style={{
+                border:
+                  errors.Email && status === "failed"
+                    ? "0.5px solid red"
+                    : "0.5px solid green",
+              }}
               className="input"
               type="email"
               id="email"
@@ -54,7 +66,7 @@ function SignIn() {
             Password
             <input
               {...register("password", {
-                required: true,
+                required: "необходимо заполнить",
                 minLength: 1,
               })}
               className="input"
@@ -80,6 +92,15 @@ function SignIn() {
             <Link to="/sign-up">Sign up</Link>
           </p>
         </form>
+        {status === "failed" ? (
+          <Alert
+            message="Неверные пользовательские данные."
+            type="error"
+            style={{
+              margin: "20px auto",
+            }}
+          />
+        ) : null}
       </div>
     </div>
   );

@@ -20,6 +20,10 @@
           font-weight: 400;
           font-size: 20px;
           line-height: 28px;
+
+          &:active, &:hover, &:target {
+            color: #52C41A;
+          }
         }
       }
      
@@ -221,6 +225,14 @@
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
+
+  &:focus {
+    border: 1px solid green;
+  }
+
+  &:invalid {
+    border: 1px solid #F5222D;
+  }
 }
 }
 
@@ -249,7 +261,12 @@
   text-align: center;
   font-family: 'Roboto', sans-serif;
 }
-
+// алерты в формах регистрации и входа
+#root > div > div > div {
+  // margin: 20px auto;
+  border-radius: 4px;
+  width: 320px;
+}
 
 @media (max-width: 390px) {
 
@@ -264,4 +281,10 @@
       margin: 20px auto;
     }
   }
+
+  #root > div > div > div {
+  width: 280px;
+  margin: 20px auto;
 }
+}
+

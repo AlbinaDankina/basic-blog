@@ -30,7 +30,7 @@ function Article({ item }: { item: ArticleType }) {
             to={`articles/${item.slug}`}
             onClick={() => dispatch(fetchArticle(item.slug))}
           >
-            <h2>{item.title}</h2>
+            <h2>{item.title ? item.title : <span>Без названия</span>}</h2>
           </Link>
           <div className="articles_item-content-likes">12</div>
         </div>

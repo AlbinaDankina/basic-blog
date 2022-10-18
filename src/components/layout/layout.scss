@@ -15,15 +15,46 @@
     font-size: 18px;
     line-height: 28px;
     padding: 8px 18px;
+    margin-left: 4px;
+
+    &:hover, &:active, &:target {
+      color: #52C41A;
+      border: 1px solid #52C41A;
+      border-radius: 4px;
+      transform: scale(0.9, 0.9);
+    }
 
     span a {
       color: rgba(0, 0, 0, 0.85);
+
+       &:hover, &:active, &:target {
+        color: #52C41A;
+       }
+
     }
 }
 
   &:first-child {
     flex-grow: 3;
   }
+
+  &_profile {
+    display: flex;
+    align-items: center;
+
+  &_user {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  & a img {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    margin-left: 5px;
+  }
+  }
+
 
 
   &_btn {
@@ -39,10 +70,12 @@
     background-color: white;
     outline: none;
     border: 1px solid transparent;
+    color: #52C41A;
 
     &:active, &:hover, &:target {
       color: #52C41A;
       border: 1px solid #52C41A;
+      transform: scale(0.9, 0.9);
     }
 
     a {

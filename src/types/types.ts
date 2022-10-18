@@ -35,18 +35,31 @@ export type FormValues = {
   Username: string | null;
   Email: string | null;
   password: string | null;
-  token: string | null;
+  confirmPassword?: string | null;
+  token: string;
   status: "idle" | "loading" | "succeeded" | "failed";
+  updateStatus: "idle" | "loading" | "succeeded" | "failed";
   isLoggedIn: boolean;
   error: unknown | null;
   consent?: boolean;
+  bio?: string | null;
+  avatar?: string | null;
+};
+
+export type UpdateProfileType = {
+  Username?: string | null;
+  Email?: string | null;
+  password?: string | null;
+  bio?: string | null;
+  avatar?: string | null;
+  token?: string;
 };
 
 export type SignupType = {
   Username?: string | null;
-  Email: string | null;
+  Email: string | null | undefined;
   password: string | null;
-  token?: string | null;
+  token?: string;
 };
 
 export type NewUser = {

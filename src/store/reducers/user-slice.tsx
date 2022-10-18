@@ -1,15 +1,18 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { FormValues, SignupType } from "../../types/types";
+import { FormValues, SignupType, UpdateProfileType } from "../../types/types";
 // import { Navigate } from "react-router-dom";
 
 const initialState: FormValues = {
   Username: null,
   Email: null,
   password: null,
-  token: null,
+  bio: null,
+  avatar: null,
+  token: "",
   status: "idle",
+  updateStatus: "idle",
   isLoggedIn: false,
   error: null,
 };
@@ -92,6 +95,52 @@ export const loginUser = createAsyncThunk<
   }
 });
 
+// экшн для редактирования профиля
+export const editProfile = createAsyncThunk<
+  any,
+  UpdateProfileType,
+  { rejectValue: string }
+>("user/editProfile", async ({ Username, Email, password, avatar, token }, { rejectWithValue }) => {
+  const BASE_URL = "https://blog.kata.academy/api";
+  try {
+    console.log("incoming data", Username, Email, password, avatar, token);
+    const response: any = await fetch(`${BASE_URL}/user`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Token ${token}`,
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: {
+          email: Email,
+          password,
+          username: Username,
+          bio: "",
+          image: avatar,
+        },
+      }),
+    });
+    console.log("upd response", response);
+    if (!response.ok) {
+      throw new Error(
+        "service is unavailable. Please try again reloading your web-page!",
+      );
+    }
+
+    if (response.status !== 200) {
+      throw new Error(
+        "Something went wrong. Please give another try"
+      );
+    }
+    const json = response.json();
+    console.log("upd data", json);
+    return json;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -101,8 +150,9 @@ const userSlice = createSlice({
       state.Email = action.payload.Email;
       state.password = action.payload.password;
     },
-    setUser() {
-      // postNewUser();
+    logOut(state) {
+      console.log("in logout");
+      state.isLoggedIn = false;
     },
     removeUserInfo(state) {
       state.Username = null;
@@ -117,11 +167,15 @@ const userSlice = createSlice({
     });
     builder.addCase(postNewUser.fulfilled, (state, action) => {
       state.status = "succeeded";
-      state.Username = action.payload.user.Username;
-      state.Email = action.payload.user.Email;
+      console.log(action.payload);
+      state.Username = action.payload.user.username;
+      state.Email = action.payload.user.email;
       state.password = action.payload.user.password;
       state.token = action.payload.user.token;
-      localStorage.setItem("token", JSON.stringify(action.payload.user.token)); // сохранить токен для последующих запросов? 
+      // сохранить данные пользователя для последующего залогинивания
+      localStorage.setItem("token", JSON.stringify(action.payload.user.token));
+      localStorage.setItem("username", JSON.stringify(action.payload.user.username));
+      localStorage.setItem("Email", JSON.stringify(action.payload.user.email));
       state.error = null;
     });
     builder.addCase(postNewUser.rejected, (state, action) => {
@@ -133,7 +187,12 @@ const userSlice = createSlice({
       state.status = "loading";
       state.error = null;
     });
-    builder.addCase(loginUser.fulfilled, (state) => {
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      // сохранить данные пользователя для последующего залогинивания
+      localStorage.setItem("username", JSON.stringify(action.payload.user.username));
+      localStorage.setItem("Email", JSON.stringify(action.payload.user.email));
+      state.Username = action.payload.user.username;
+      state.Email = action.payload.user.email;
       state.status = "succeeded";
       state.isLoggedIn = true;
       state.error = null;
@@ -142,10 +201,33 @@ const userSlice = createSlice({
       state.status = "failed";
       state.isLoggedIn = false;
       state.error = action.payload;
+      // alert("Неверные пользовательские данные");
+      console.log(state.error);
+    });
+    builder.addCase(editProfile.pending, (state) => {
+      state.updateStatus = "loading";
+      state.error = null;
+    });
+    builder.addCase(editProfile.fulfilled, (state, action) => {
+      state.updateStatus = "succeeded";
+      console.log("edit succeeded", action.payload.user);
+      state.Username = action.payload.user.username;
+      state.Email = action.payload.user.email;
+      state.avatar = action.payload.user.image;
+      state.bio = action.payload.user.bio;
+      state.password = action.payload.user.password;
+      // сохранить данные пользователя для последующего залогинивания
+      localStorage.setItem("username", JSON.stringify(action.payload.user.username));
+      localStorage.setItem("Email", JSON.stringify(action.payload.user.email));
+      state.error = null;
+    });
+    builder.addCase(editProfile.rejected, (state, action) => {
+      state.updateStatus = "failed";
+      state.error = action.payload;
       console.log(state.error);
     });
   },
 });
 
-export const { setUser, getNewUserInfo, removeUserInfo } = userSlice.actions;
+export const { logOut, getNewUserInfo, removeUserInfo } = userSlice.actions;
 export default userSlice.reducer;
