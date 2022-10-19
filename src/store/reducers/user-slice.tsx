@@ -153,7 +153,8 @@ const userSlice = createSlice({
     logOut(state) {
       console.log("in logout");
       state.isLoggedIn = false;
-    },
+      // localStorage.setItem("isLoggedIn", JSON.stringify(false));
+     },
     removeUserInfo(state) {
       state.Username = null;
       state.Email = null;
@@ -191,6 +192,7 @@ const userSlice = createSlice({
       // сохранить данные пользователя для последующего залогинивания
       localStorage.setItem("username", JSON.stringify(action.payload.user.username));
       localStorage.setItem("Email", JSON.stringify(action.payload.user.email));
+      localStorage.setItem("isLoggedIn", JSON.stringify(true));
       state.Username = action.payload.user.username;
       state.Email = action.payload.user.email;
       state.status = "succeeded";
@@ -219,6 +221,7 @@ const userSlice = createSlice({
       // сохранить данные пользователя для последующего залогинивания
       localStorage.setItem("username", JSON.stringify(action.payload.user.username));
       localStorage.setItem("Email", JSON.stringify(action.payload.user.email));
+      localStorage.setItem("avatar", JSON.stringify(action.payload.user.image));
       state.error = null;
     });
     builder.addCase(editProfile.rejected, (state, action) => {

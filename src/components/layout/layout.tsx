@@ -6,10 +6,16 @@ import "./layout.scss";
 
 function Layout() {
   const dispatch = useAppDispatch();
+
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const name = useAppSelector((state) => state.user.Username);
   const avatarSrc = useAppSelector((state) => state.user.avatar);
+  // const isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn")!);
+  // const name = JSON.parse(localStorage.getItem("username")!);
+  // const avatarSrc = JSON.parse(localStorage.getItem("avatar")!);
+
   const isAuth = localStorage.getItem("token");
+
   if (isAuth && isLoggedIn === true) {
     return (
       <>
@@ -29,7 +35,7 @@ function Layout() {
               <div className="header_user">{name}</div>
               <Link to="/profile">
                 <img
-                  src={avatarSrc !== null ? avatarSrc : "./profile.png"}
+                  src={avatarSrc !== null ? avatarSrc : "profile.png"}
                   alt=""
                   className="user_photo"
                 />

@@ -8,7 +8,7 @@ import {
   updateArticle,
 } from "../../store/reducers/user-article-slice";
 
-function CreateAndEditArticle() {
+function CreateArticle() {
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   console.log("isLoggedIn", isLoggedIn);
   const dispatch = useAppDispatch();
@@ -24,17 +24,12 @@ function CreateAndEditArticle() {
   });
 
   const token = JSON.parse(localStorage.getItem("token")!);
-  const article = useAppSelector((state) => state.posts.article);
-  console.log("article in edit", article);
-
-  console.log("SLUG", slug);
   const onSubmit: SubmitHandler<NewArticleType> = ({
     title,
     description,
     text,
     tags,
   }) => {
-    console.log(title, description, text, token, tags, slug);
     if (!slug) {
       dispatch(publishArticle({ title, description, text, slug, token }));
     }
@@ -46,9 +41,7 @@ function CreateAndEditArticle() {
     <div className="new_article_wrapper">
       <div className="article new_article">
         <form className="entry_block-wrapper" onSubmit={handleSubmit(onSubmit)}>
-          <h2 className="entry_block-header">
-            {slug !== undefined ? `Edit article` : `Create new article`}
-          </h2>
+          <h2 className="entry_block-header">Create new article</h2>
           <label className="label" htmlFor="title">
             Title
             <input
@@ -59,7 +52,6 @@ function CreateAndEditArticle() {
               type="text"
               id="title"
               placeholder="Title"
-              defaultValue={slug !== undefined ? article?.title : ""}
             />
             <div className="label_error">
               {errors.title && <p>{errors.title.message}</p>}
@@ -75,7 +67,6 @@ function CreateAndEditArticle() {
               type="text"
               id="description"
               placeholder="Short description"
-              defaultValue={slug !== undefined ? article?.description : ""}
             />
             <div className="label_error">
               {errors.description && <p>{errors.description.message}</p>}
@@ -92,7 +83,6 @@ function CreateAndEditArticle() {
               className="input"
               id="fulltext"
               placeholder="Text"
-              defaultValue={slug !== undefined ? article?.body : ""}
             />
             <div className="label_error">
               {errors.text && <p>{errors.text.message}</p>}
@@ -131,4 +121,4 @@ function CreateAndEditArticle() {
   );
 }
 
-export default CreateAndEditArticle;
+export default CreateArticle;

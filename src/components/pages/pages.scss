@@ -135,6 +135,37 @@
         display: flex;
         flex-direction: column;
       }
+
+      &-buttons {
+        display: flex;
+        justify-content: flex-end;
+
+        .btn {
+          margin-left: 10px;
+          width: 85px;
+          height: 40px;
+
+          &:hover:active {
+            transform: scale(0.9);
+            font-weight: 600;
+          }
+        }
+
+        .btn-delete {
+          display: block;
+          // margin-right: 10px;
+          background-color: #FFFFFF;
+          border: 1px solid #F5222D;
+          color: #F5222D;
+        }
+
+        .btn-edit {
+          display: block;
+          background-color: #FFFFFF;
+          border: 1px solid #52C41A;;
+          color: #52C41A;;
+        }
+      }
     }
 }
 
@@ -267,11 +298,12 @@
       }
 }
 // алерты в формах регистрации и входа
-#root > div > div > div {
+.ant-alert-success  {
   // margin: 20px auto;
   border-radius: 4px;
-  // width: 320px; // надо доп класс ввести в алерты тк иначе меняется ширина у div в article content!
+  width: 320px; // надо доп класс ввести в алерты тк иначе меняется ширина у div в article content!
 }
+
 
 // создание новой статьи
 .new_article_wrapper {
@@ -279,7 +311,7 @@
   height: 100vh;
 
   .new_article {
-    margin: 20px;
+    margin: 20px auto;
     height: 80%;
 
     form {
@@ -377,7 +409,7 @@
       margin-left: 0;
       justify-content: flex-start;
     }
-    
+
     .btn-delete {
       top: 70px;
       right: 215px;

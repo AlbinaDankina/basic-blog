@@ -1,9 +1,13 @@
 import uniqid from "uniqid";
 import ReactMarkdown from "react-markdown";
+import { Link, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 
 function ArticleContent() {
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const article = useAppSelector((state) => state.posts.article);
+  const { slug } = useParams();
+  console.log("SLUG", slug);
   const tagUnit = article?.tagList.map((el) => (
     <div key={uniqid()} className="articles_item-content-tags-item">
       {el}
@@ -36,6 +40,18 @@ function ArticleContent() {
             </div>
           </div>
         </div>
+        {isLoggedIn ? (
+          <div className="article_content-buttons">
+            <input className="btn btn-delete" type="button" value="Delete" />
+            <Link to={`/articles/:${slug}/edit`}>
+              <input
+                className="btn btn-add btn-edit"
+                type="button"
+                value="Edit"
+              />
+            </Link>
+          </div>
+        ) : null}
         <ReactMarkdown>{article?.body!}</ReactMarkdown>
       </div>
     </div>
