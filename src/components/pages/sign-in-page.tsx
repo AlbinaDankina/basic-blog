@@ -13,6 +13,7 @@ function SignIn() {
   const status = useAppSelector((state) => state.user.status);
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("token")!);
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const {
     register,
     handleSubmit,
@@ -25,11 +26,12 @@ function SignIn() {
   // производим запрос на проверку регистрационных данных и если все ок, то навигируем пользователя на залогиненную гл страницу
   const onSubmit: SubmitHandler<SignupType> = ({ Email, password }) => {
     dispatch(loginUser({ Email, password, token }));
-    if (status === "succeeded") navigate("/");
-    if (status === "failed") navigate("/sign-in");
+    // if (status === "succeeded") navigate("/");
+    // if (status === "failed") navigate("/sign-in");
     reset();
   };
 
+  if (isLoggedIn) navigate("/");
   return (
     <div className="entry_container">
       <div className="entry_block">
@@ -86,6 +88,11 @@ function SignIn() {
             className="btn btn-create"
             type="submit"
             value="Login"
+            onChange={() => {
+              if (status === "succeeded") {
+                navigate("/");
+              }
+            }}
           />
           <p>
             Dont't have an account?

@@ -75,3 +75,48 @@ export type NewUser = {
 export type MyKnownError = {
   errorMessage: string;
 };
+
+export type UserArticleInitialType = {
+  isModalVisible: boolean;
+  isArticlePublished: "idle" | "loading" | "succeeded" | "failed";
+  isArticleUpdated: "idle" | "loading" | "succeeded" | "failed";
+  error: boolean | null;
+};
+
+export type NewArticleType = {
+  title: string;
+  description: string;
+  text: string;
+  tags?: [string];
+  slug?: string;
+  token: string | null;
+};
+
+export type PublishedArticle = {
+  article: {
+    slug: string;
+    title: string;
+    description: string;
+    body: string;
+    tagList: [string];
+    createdAt: string;
+    updatedAt: string;
+    favorited: boolean;
+    favoritesCount: number;
+    author: {
+      username: string;
+      bio: string;
+      image: string;
+      following: boolean;
+    };
+  };
+};
+
+export type SendToPublishType = {
+  article: {
+    title: string;
+    description: string;
+    body: string;
+    tagList: [string];
+  };
+};

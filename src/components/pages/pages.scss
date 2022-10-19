@@ -115,7 +115,7 @@
 // страница с постом
 .article {
     max-width: 941px;
-    margin: 0 auto;
+    margin: 0 15px;
     margin-top: 20px;
     background-color: #FFFFFF;
     border-radius: 10px;
@@ -123,8 +123,8 @@
 
     &_wrapper {
       padding: 15px;
-      margin-right: 20px;
-      margin-left: 20px;
+      // margin-right: 20px;
+      // margin-left: 20px;
     }
 
     .article_content {
@@ -140,7 +140,7 @@
 
 // страница входа
 .entry_container {
-  background-color: gray;
+  background-color: #E5E5E5;
   height: 100vh;
 }
 .entry_block {
@@ -260,21 +260,139 @@
   letter-spacing: 0em;
   text-align: center;
   font-family: 'Roboto', sans-serif;
+
+  &:hover:active {
+        transform: scale(0.9);
+        font-weight: 600;
+      }
 }
 // алерты в формах регистрации и входа
 #root > div > div > div {
   // margin: 20px auto;
   border-radius: 4px;
-  width: 320px;
+  // width: 320px; // надо доп класс ввести в алерты тк иначе меняется ширина у div в article content!
+}
+
+// создание новой статьи
+.new_article_wrapper {
+  background-color: #E5E5E5;
+  height: 100vh;
+
+  .new_article {
+    margin: 20px;
+    height: 80%;
+
+    form {
+      width: 100%;
+    }
+
+    &-tags {
+      max-width: 300px;
+      
+      .label {
+        margin-bottom: 10px;
+
+        &_inputs {
+          display: flex;
+          flex-direction: row;
+
+          .input {
+            width: 300px;
+            flex-shrink: 0;
+          }
+        }
+      }
+    }  
+
+    &-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin-left: 10px;
+    }
+
+    .new_article-tags {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .btn-delete {
+      display: block;
+      margin-right: 10px;
+      width: 85px;
+      height: 40px;
+      background-color: #FFFFFF;
+      border: 1px solid #F5222D;
+      color: #F5222D;
+
+      &:hover:active {
+        transform: scale(0.9);
+        font-weight: 600;
+      }
+    }
+
+    .btn-add {
+      display: block;
+      width: 85px;
+      height: 40px;
+      background-color: #FFFFFF;
+      border: 1px solid #1890FF;
+      color: #1890FF;
+
+      &:hover:active {
+        transform: scale(0.9);
+        font-weight: 600;
+      }
+    }
+
+    .btn-sent {
+      max-width: 300px;
+
+      &:hover:active {
+        transform: scale(0.9);
+        font-weight: 600;
+      }
+    }
+
+    .input {
+      max-height: 168px;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+
+  .new_article_wrapper {
+  .new_article {
+
+    &-tags {
+      .label {
+        &_inputs {
+          flex-direction: column;
+        }
+      }
+    }
+
+    &-buttons {
+      margin-left: 0;
+      justify-content: flex-start;
+    }
+    
+    .btn-delete {
+      top: 70px;
+      right: 215px;
+    }
+
+    .btn-add {
+      top: 70px;
+      right: 120px;
+    }
+  }
+ }
 }
 
 @media (max-width: 390px) {
-
-  .article {
-    margin-right: 15px;
-    margin-left: 1px;
-  }
-
+  
   .entry_block {
     &-wrapper {
       width: 280px;
@@ -283,8 +401,13 @@
   }
 
   #root > div > div > div {
-  width: 280px;
+  max-width: 280px; // сделала max-width вместо width, тк иначе у содержимого div в article-content улетает за края экрана
   margin: 20px auto;
 }
-}
 
+  .label_concent {
+    &-checkbox {
+      margin-left: -220px;
+    }
+  }
+}

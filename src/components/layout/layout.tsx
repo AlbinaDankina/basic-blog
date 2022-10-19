@@ -9,14 +9,11 @@ function Layout() {
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const name = useAppSelector((state) => state.user.Username);
   const avatarSrc = useAppSelector((state) => state.user.avatar);
-  console.log("isLoggedIn", isLoggedIn);
-  // const isLoggedIn = localStorage.getItem("isLoggedIn");
-  // const areArticlesLoaded = useAppSelector((state) => state.posts.status);
   const isAuth = localStorage.getItem("token");
   if (isAuth && isLoggedIn === true) {
     return (
       <>
-        <header className="header">
+        <header className="header height_loggedIn">
           <menu className="header_menu">
             <div className="header_logo">
               <span>
@@ -25,7 +22,9 @@ function Layout() {
             </div>
             <div className="header_profile">
               <button className="header_btn" type="button">
-                <span>Create Article</span>
+                <Link to="/new-article">
+                  <span>Create Article</span>
+                </Link>
               </button>
               <div className="header_user">{name}</div>
               <Link to="/profile">

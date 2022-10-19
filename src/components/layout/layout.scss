@@ -17,12 +17,13 @@
     padding: 8px 18px;
     margin-left: 4px;
 
-    &:hover, &:active, &:target {
-      color: #52C41A;
-      border: 1px solid #52C41A;
-      border-radius: 4px;
-      transform: scale(0.9, 0.9);
-    }
+     &:hover:active {
+        transform: scale(0.9);
+        font-weight: 600;
+        color: #52C41A;
+        border: 1px solid #52C41A;
+        border-radius: 4px;
+      }
 
     span a {
       color: rgba(0, 0, 0, 0.85);
@@ -72,11 +73,12 @@
     border: 1px solid transparent;
     color: #52C41A;
 
-    &:active, &:hover, &:target {
-      color: #52C41A;
-      border: 1px solid #52C41A;
-      transform: scale(0.9, 0.9);
-    }
+    &:hover:active {
+        transform: scale(0.9);
+        font-weight: 600;
+        color: #52C41A;
+        border: 1px solid #52C41A;
+      }
 
     a {
       color: rgba(0, 0, 0, 0.85);
@@ -148,11 +150,16 @@
 
 }
 
+@media (max-width: 490px) {
+  .height_loggedIn {
+    height: 100px;
+  }
+}
+
 @media (max-width: 390px) {
   .header {
-
     &_logo {
-      padding-top: 0;
+      padding-top: 5px;
     }
 
     &_btn {
