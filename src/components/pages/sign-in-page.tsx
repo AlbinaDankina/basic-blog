@@ -99,6 +99,8 @@ function SignIn() {
             type="error"
             style={{
               margin: "20px auto",
+              maxWidth: "320px",
+              width: "100%",
             }}
           />
         ) : null}

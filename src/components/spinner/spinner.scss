@@ -12,7 +12,7 @@
   top: 20px;
   left: 20px;
   border-radius: 50%;
-  box-shadow: 0 4px 0 0 #e15b64;
+  box-shadow: 0 4px 0 0 gray !important;
   transform-origin: 80px 82px;
 }
 .loadingio-spinner-eclipse-4lq3xlpgc3e {
@@ -21,7 +21,6 @@
   display: block;
   margin: 0 auto;
   overflow: hidden;
-  background: #ffffff;
 }
 .ldio-wb9j5tne9n {
   width: 100%;
@@ -30,5 +29,6 @@
   transform: translateZ(0) scale(1);
   backface-visibility: hidden;
   transform-origin: 0 0; /* see note above */
+  background: #E5E5E5;
 }
 .ldio-wb9j5tne9n div {box-sizing: content-box;}

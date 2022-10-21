@@ -18,3 +18,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+div.ant-alert {
+  max-width: 320px !important;
+}
+
+@media (max-width: 390px) {
+  div.ant-alert{
+    max-width: 280px !important;
+  }
+}

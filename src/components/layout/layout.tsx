@@ -1,12 +1,10 @@
 import { Outlet, Link } from "react-router-dom";
-// import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   logOut,
   logIn,
   getLoggedInUser,
 } from "../../store/reducers/user-slice";
-// import Spinner from "../spinner";
 import "./layout.scss";
 import { underCreate } from "../../store/reducers/user-article-slice";
 import profilePic from "../pages/img/alternative.jpg";
@@ -18,23 +16,13 @@ function Layout() {
   const avatarSrc = useAppSelector((state) => state.user.avatar);
 
   // залогинивание пользователя при f5
-  // useEffect(() => {
-  //   const isAuth = !!localStorage.getItem("token");
-  //   if (isAuth) {
-  //     dispatch(logIn());
-  //     dispatch(getLoggedInUser());
-  //   }
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getLoggedInUser());
-  // }, []);
   const isAuth = !!localStorage.getItem("token");
   if (isAuth) {
     dispatch(logIn());
     dispatch(getLoggedInUser());
   }
 
+  // вид для залогиненного пользователя
   if (isLoggedIn) {
     return (
       <>
@@ -80,6 +68,7 @@ function Layout() {
     );
   }
 
+  // вид для незалогиненного пользователя
   return (
     <>
       <header className="header">

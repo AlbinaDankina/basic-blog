@@ -1,7 +1,7 @@
 import uniqid from "uniqid";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import {
-  fetchPosts,
+  // fetchPosts,
   setCurrentPage,
   setPrevPage,
   setNextPage,
@@ -18,10 +18,6 @@ function Pagination() {
   const currentPage = useAppSelector((state) => state.posts.currentPage);
   const pages: number[] | any[] = [];
   createPages(pages, articlesCount, currentPage);
-
-  useEffect(() => {
-    dispatch(fetchPosts(currentPage));
-  }, [currentPage]);
 
   return (
     <div className="pages">

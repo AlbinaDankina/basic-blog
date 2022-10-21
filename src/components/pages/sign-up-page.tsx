@@ -1,17 +1,16 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable react/jsx-props-no-spreading */
 import { Link } from "react-router-dom";
-import { Alert } from "antd";
+// import { Alert } from "antd";
+// import { useEffect } from "react";
 import "antd/dist/antd.min.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 // import { useEffect } from "react";
 import { FormValues } from "../../types/types";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch } from "../../store/hooks";
 import { postNewUser } from "../../store/reducers/user-slice";
 
 function SignUp() {
   const dispatch = useAppDispatch();
-  const status = useAppSelector((state) => state.user.status);
+  // const status = useAppSelector((state) => state.user.status);
   // валидация формы входа
   const {
     register,
@@ -36,8 +35,8 @@ function SignUp() {
 
   // const isAuth = !!localStorage.getItem("token");
   const password = watch("password");
-  // useEffect(() => {
-  //   const alert = setTimeout(() => {
+  // const alert = useEffect(() => {
+  //   setTimeout(() => {
   //     if (status === "succeeded") {
   //       <Alert
   //         message="Регистрация прошла успешно"
@@ -45,7 +44,8 @@ function SignUp() {
   //         style={{ margin: "20px auto" }}
   //       />;
   //     }
-  //   });
+  //   }, 1000);
+  //   // return clearTimeout(alert);
   // }, [status]);
 
   console.log("alert", alert);
@@ -53,6 +53,7 @@ function SignUp() {
   return (
     <div className="entry_container">
       <div className="entry_block">
+        {/* <> */}
         <form className="entry_block-wrapper" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="entry_block-header">Create new account</h2>
           <label className="label" htmlFor="username">
@@ -82,7 +83,6 @@ function SignUp() {
               )}
             </div>
           </label>
-
           <label className="label" htmlFor="email">
             Email address
             <input
@@ -167,8 +167,9 @@ function SignUp() {
             Already have an account? <Link to="/sign-in">Sign in</Link>
           </p>
         </form>
-        {/* {alert} */}
-        {status === "succeeded" ? (
+        {/* {alert}
+        </> */}
+        {/* {status === "succeeded" ? (
           <>
             <Alert
               message="Регистрация прошла успешно"
@@ -185,12 +186,12 @@ function SignUp() {
               }}
             >
               Перейти на страницу{" "}
-              <Link to="/sign-in" style={{ color: "white", cursor: "pointer" }}>
+              <Link to="/sign-in" style={{ color: "blue", cursor: "pointer" }}>
                 входа
               </Link>
             </div>
           </>
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   );
