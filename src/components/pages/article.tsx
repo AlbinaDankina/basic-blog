@@ -2,7 +2,7 @@ import uniqid from "uniqid";
 import "./pages.scss";
 import { Link } from "react-router-dom";
 import { ArticleType } from "../../types/types";
-// import { truncate } from "../../logic/truncate-text";
+import { truncate } from "../../logic/truncate-text";
 import { useAppDispatch } from "../../store/hooks";
 import { fetchArticle } from "../../store/reducers/post-slice";
 
@@ -34,8 +34,8 @@ function Article({ item }: { item: ArticleType }) {
           <div className="articles_item-content-likes">12</div>
         </div>
         <div className="articles_item-content-tags">{tagUnit}</div>
-        {/* <p className="articles_item-content-text">{truncate(item.body)}</p> */}
-        <p className="articles_item-content-text">{item.body}</p>
+        <p className="articles_item-content-text">{truncate(item.body)}</p>
+        {/* <p className="articles_item-content-text">{item.body}</p> */}
       </div>
       <div className="articles_item-user user">
         <div>

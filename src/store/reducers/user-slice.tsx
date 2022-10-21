@@ -150,9 +150,13 @@ const userSlice = createSlice({
       state.Email = action.payload.Email;
       state.password = action.payload.password;
     },
+    logIn(state) {
+      state.isLoggedIn = true;
+    },
     logOut(state) {
       console.log("in logout");
       state.isLoggedIn = false;
+      // state.isLoggedIn = false;
       localStorage.removeItem("token");
      },
     removeUserInfo(state) {
@@ -185,6 +189,7 @@ const userSlice = createSlice({
       state.error = null;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
+      console.log("login suceeded");
       // сохранить токен для разлогинивания
       localStorage.setItem("token", JSON.stringify(action.payload.user.token));
       state.Username = action.payload.user.username;
@@ -222,5 +227,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logOut, getNewUserInfo, removeUserInfo } = userSlice.actions;
+export const { logOut, logIn, getNewUserInfo, removeUserInfo } = userSlice.actions;
 export default userSlice.reducer;

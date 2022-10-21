@@ -1,6 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { logOut } from "../../store/reducers/user-slice";
+import { logOut, logIn } from "../../store/reducers/user-slice";
 // import Spinner from "../spinner";
 import "./layout.scss";
 import { underCreate } from "../../store/reducers/user-article-slice";
@@ -14,9 +15,17 @@ function Layout() {
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const name = useAppSelector((state) => state.user.Username);
   const avatarSrc = useAppSelector((state) => state.user.avatar);
-  const isAuth = !!localStorage.getItem("token");
+  // const isAuth = !!localStorage.getItem("token");
 
-  if (isAuth && isLoggedIn === true) {
+  // залогинивание пользователя при f5
+  useEffect(() => {
+    const isAuth = !!localStorage.getItem("token");
+    if (isAuth) {
+      dispatch(logIn());
+    }
+  }, []);
+
+  if (isLoggedIn) {
     return (
       <>
         <header className="header height_loggedIn">

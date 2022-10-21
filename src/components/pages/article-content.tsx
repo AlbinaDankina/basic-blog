@@ -1,30 +1,33 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import uniqid from "uniqid";
 import ReactMarkdown from "react-markdown";
+// import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { showModal, underEdit } from "../../store/reducers/user-article-slice";
 import ConfirmDelete from "../popup/confirm-delete";
+import profilePic from "./img/alternative.jpg";
 
 function ArticleContent() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const article = useAppSelector((state) => state.posts.article);
   const slug = article?.slug;
-  const isArticleDeleted = useAppSelector(
-    (state) => state.article.isArticleDeleted,
+  const isArticlePublished = useAppSelector(
+    (state) => state.article.isArticlePublished,
   );
-  // const navigate = useNavigate();
   const tagUnit = article?.tagList.map((el) => (
     <div key={uniqid()} className="articles_item-content-tags-item">
       {el}
     </div>
   ));
-  console.log("isArticleDeleted", isArticleDeleted);
+  console.log("isArticlePublished", isArticlePublished);
+  // console.log("isArticleDeleted", isArticleDeleted);
   if (!article?.updatedAt) return null;
-  // if (isArticleDeleted === "succeeded") {
-  //   navigate("/");
-  // }
+
+  // useEffect(() => {
+  //   if (isArticleDeleted === ("succeeded" || "loading")) navigate("/");
+  // }, [isArticleDeleted]);
 
   const year = new Date(article!.updatedAt).getFullYear();
   const day = new Date(article!.updatedAt).getDate();
@@ -49,7 +52,11 @@ function ArticleContent() {
               <div className="user_feedback-date">{`${month} ${day}, ${year}`}</div>
             </div>
             <div className="user_photo">
-              <img src={article?.author.image} alt="" className="user_photo" />
+              <img
+                src={article?.author.image || profilePic}
+                alt=""
+                className="user_photo"
+              />
             </div>
           </div>
         </div>

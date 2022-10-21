@@ -33,6 +33,7 @@ function SignUp() {
     reset();
   };
 
+  // const isAuth = !!localStorage.getItem("token");
   const password = watch("password");
 
   return (

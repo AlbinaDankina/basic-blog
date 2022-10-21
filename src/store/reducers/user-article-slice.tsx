@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import {
   UserArticleInitialType,
   NewArticleType,
@@ -44,12 +44,14 @@ export const publishArticle = createAsyncThunk<
       });
       if (!response.ok) {
         throw new Error(
-          "service is unavailable. Please try again reloading your web-page!",
+          "Ooops, something happened while publishing. See details in NetWork page in DevTools in your browser",
         );
       }
 
       if (response.status !== (200 || 201)) {
-        throw new Error("Something went wrong. Please give another try");
+        throw new Error(
+          "Something went wrong. See details in NetWork page in DevTools in your browser",
+        );
       }
       const json = response.json();
       return json;
@@ -86,12 +88,14 @@ export const updateArticle = createAsyncThunk<
       });
       if (!response.ok) {
         throw new Error(
-          "service is unavailable. Please try again reloading your web-page!",
+          "Something went wrong. See details in NetWork page in DevTools in your browser",
         );
       }
 
       if (response.status !== (200 || 201)) {
-        throw new Error("Something went wrong. Please give another try");
+        throw new Error(
+          "Something went wrong. See details in NetWork page in DevTools in your browser",
+        );
       }
       const json = response.json();
       return json;
@@ -113,17 +117,14 @@ export const deleteArticle = createAsyncThunk<
       method: "DELETE",
       headers: {
         Authorization: `Token ${token}`,
-        // Accept: "application/json",
-        // "Content-Type": "application/json",
       },
     });
     console.log("response in delete", response);
     if (!response.ok) {
       throw new Error(
-        "service is unavailable. Please try again reloading your web-page!",
+        "Ooops, something happened while deletion. See details in NetWork page in DevTools in your browser",
       );
     }
-
     return response;
   } catch (error: any) {
     return rejectWithValue(error.message);
@@ -138,7 +139,6 @@ const articleSlice = createSlice({
       state.isModalVisible = !state.isModalVisible;
     },
     underEdit(state) {
-      console.log("in edit");
       state.isEdit = true;
     },
     underCreate(state) {
@@ -174,14 +174,16 @@ const articleSlice = createSlice({
     });
     builder.addCase(deleteArticle.pending, (state) => {
       state.isArticleDeleted = "loading";
+      // const navigate = useNavigate();
+      // navigate("/articles");
       console.log("delete pending");
       state.error = null;
     });
     builder.addCase(deleteArticle.fulfilled, (state, action) => {
       state.isArticleDeleted = "succeeded";
       console.log("delete succeeded", action.payload);
-      const navigate = useNavigate();
-      navigate("/");
+      // const navigate = useNavigate();
+      // navigate("/articles");
       state.error = null;
     });
     builder.addCase(deleteArticle.rejected, (state) => {

@@ -88,6 +88,7 @@ const postsSlice = createSlice({
     });
     builder.addCase(fetchArticle.fulfilled, (state, action) => {
       state.status = "resolved";
+      console.log("fetchArticle", action.payload);
       state.article = action.payload;
       state.error = null;
     });

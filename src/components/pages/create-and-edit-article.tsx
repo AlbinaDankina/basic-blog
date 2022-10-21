@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { NewArticleType } from "../../types/types";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -14,7 +15,7 @@ function CreateAndEditArticle() {
   const article = useAppSelector((state) => state.posts.article);
   const slug = article?.slug;
   const isEdit = useAppSelector((state) => state.article.isEdit);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -139,7 +140,12 @@ function CreateAndEditArticle() {
                 </div>
               </div>
             </label>
-            <input className="btn btn-sent" type="submit" value="Send" />
+            <input
+              className="btn btn-sent"
+              type="submit"
+              value="Send"
+              onClick={() => navigate("/")}
+            />
           </div>
         </form>
       </div>
