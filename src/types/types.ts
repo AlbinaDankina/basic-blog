@@ -43,7 +43,7 @@ export type FormValues = {
   error: unknown | null;
   consent?: boolean;
   bio?: string | null;
-  avatar?: string | null;
+  avatar?: string | null | undefined;
 };
 
 export type UpdateProfileType = {
@@ -51,7 +51,7 @@ export type UpdateProfileType = {
   Email?: string | null;
   password?: string | null;
   bio?: string | null;
-  avatar?: string | null;
+  avatar?: string | null | undefined;
   token?: string;
 };
 
@@ -80,6 +80,8 @@ export type UserArticleInitialType = {
   isModalVisible: boolean;
   isArticlePublished: "idle" | "loading" | "succeeded" | "failed";
   isArticleUpdated: "idle" | "loading" | "succeeded" | "failed";
+  isArticleDeleted: "idle" | "loading" | "succeeded" | "failed";
+  isEdit: boolean;
   error: boolean | null;
 };
 
@@ -119,4 +121,9 @@ export type SendToPublishType = {
     body: string;
     tagList: [string];
   };
+};
+
+export type DeleteArticleType = {
+  slug: string | undefined;
+  token: string;
 };

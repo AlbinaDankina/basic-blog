@@ -26,8 +26,7 @@ function SignIn() {
   // производим запрос на проверку регистрационных данных и если все ок, то навигируем пользователя на залогиненную гл страницу
   const onSubmit: SubmitHandler<SignupType> = ({ Email, password }) => {
     dispatch(loginUser({ Email, password, token }));
-    // if (status === "succeeded") navigate("/");
-    // if (status === "failed") navigate("/sign-in");
+    // dispath(getUser)
     reset();
   };
 
@@ -88,11 +87,6 @@ function SignIn() {
             className="btn btn-create"
             type="submit"
             value="Login"
-            onChange={() => {
-              if (status === "succeeded") {
-                navigate("/");
-              }
-            }}
           />
           <p>
             Dont't have an account?

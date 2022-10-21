@@ -153,7 +153,7 @@ const userSlice = createSlice({
     logOut(state) {
       console.log("in logout");
       state.isLoggedIn = false;
-      // localStorage.setItem("isLoggedIn", JSON.stringify(false));
+      localStorage.removeItem("token");
      },
     removeUserInfo(state) {
       state.Username = null;
@@ -173,10 +173,6 @@ const userSlice = createSlice({
       state.Email = action.payload.user.email;
       state.password = action.payload.user.password;
       state.token = action.payload.user.token;
-      // сохранить данные пользователя для последующего залогинивания
-      localStorage.setItem("token", JSON.stringify(action.payload.user.token));
-      localStorage.setItem("username", JSON.stringify(action.payload.user.username));
-      localStorage.setItem("Email", JSON.stringify(action.payload.user.email));
       state.error = null;
     });
     builder.addCase(postNewUser.rejected, (state, action) => {
@@ -189,12 +185,11 @@ const userSlice = createSlice({
       state.error = null;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      // сохранить данные пользователя для последующего залогинивания
-      localStorage.setItem("username", JSON.stringify(action.payload.user.username));
-      localStorage.setItem("Email", JSON.stringify(action.payload.user.email));
-      localStorage.setItem("isLoggedIn", JSON.stringify(true));
+      // сохранить токен для разлогинивания
+      localStorage.setItem("token", JSON.stringify(action.payload.user.token));
       state.Username = action.payload.user.username;
       state.Email = action.payload.user.email;
+      state.avatar = action.payload.user.image;
       state.status = "succeeded";
       state.isLoggedIn = true;
       state.error = null;
@@ -203,7 +198,6 @@ const userSlice = createSlice({
       state.status = "failed";
       state.isLoggedIn = false;
       state.error = action.payload;
-      // alert("Неверные пользовательские данные");
       console.log(state.error);
     });
     builder.addCase(editProfile.pending, (state) => {
@@ -218,10 +212,6 @@ const userSlice = createSlice({
       state.avatar = action.payload.user.image;
       state.bio = action.payload.user.bio;
       state.password = action.payload.user.password;
-      // сохранить данные пользователя для последующего залогинивания
-      localStorage.setItem("username", JSON.stringify(action.payload.user.username));
-      localStorage.setItem("Email", JSON.stringify(action.payload.user.email));
-      localStorage.setItem("avatar", JSON.stringify(action.payload.user.image));
       state.error = null;
     });
     builder.addCase(editProfile.rejected, (state, action) => {

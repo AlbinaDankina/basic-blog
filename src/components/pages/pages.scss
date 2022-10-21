@@ -113,9 +113,10 @@
 }
 
 // страница с постом
+
 .article {
     max-width: 941px;
-    margin: 0 15px;
+    margin: 15px auto;
     margin-top: 20px;
     background-color: #FFFFFF;
     border-radius: 10px;
@@ -123,6 +124,7 @@
 
     &_wrapper {
       padding: 15px;
+      position: relative;
       // margin-right: 20px;
       // margin-left: 20px;
     }
@@ -168,7 +170,6 @@
       }
     }
 }
-
 // страница входа
 .entry_container {
   background-color: #E5E5E5;
@@ -268,7 +269,7 @@
 }
 
 .label_concent-input:checked + .label_concent-checkbox {
-  background-image: url("./no-label.png");
+  background-image: url("./img/no-label.png");
 }
 
 .input {

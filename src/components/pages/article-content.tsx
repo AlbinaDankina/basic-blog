@@ -1,26 +1,39 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import uniqid from "uniqid";
 import ReactMarkdown from "react-markdown";
-import { Link, useParams } from "react-router-dom";
-import { useAppSelector } from "../../store/hooks";
+import { Link } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { showModal, underEdit } from "../../store/reducers/user-article-slice";
+import ConfirmDelete from "../popup/confirm-delete";
 
 function ArticleContent() {
+  const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const article = useAppSelector((state) => state.posts.article);
-  const { slug } = useParams();
-  console.log("SLUG", slug);
+  const slug = article?.slug;
+  const isArticleDeleted = useAppSelector(
+    (state) => state.article.isArticleDeleted,
+  );
+  // const navigate = useNavigate();
   const tagUnit = article?.tagList.map((el) => (
     <div key={uniqid()} className="articles_item-content-tags-item">
       {el}
     </div>
   ));
+  console.log("isArticleDeleted", isArticleDeleted);
   if (!article?.updatedAt) return null;
+  // if (isArticleDeleted === "succeeded") {
+  //   navigate("/");
+  // }
+
   const year = new Date(article!.updatedAt).getFullYear();
   const day = new Date(article!.updatedAt).getDate();
   const month = new Date(article!.updatedAt).toLocaleString("default", {
     month: "long",
   });
+
   return (
-    <div className="article">
+    <div className="article positioning">
       <div className="article_wrapper">
         <div className="article_content">
           <div className="article_content-wrapper">
@@ -41,16 +54,27 @@ function ArticleContent() {
           </div>
         </div>
         {isLoggedIn ? (
-          <div className="article_content-buttons">
-            <input className="btn btn-delete" type="button" value="Delete" />
-            <Link to={`/articles/:${slug}/edit`}>
+          <>
+            <div className="article_content-buttons">
               <input
-                className="btn btn-add btn-edit"
+                className="btn btn-delete"
                 type="button"
-                value="Edit"
+                value="Delete"
+                onClick={() => dispatch(showModal())}
               />
-            </Link>
-          </div>
+              <Link to={`/articles/:${slug}/edit`}>
+                <button
+                  className="btn btn-add btn-edit"
+                  type="button"
+                  value="Edit"
+                  onClick={() => dispatch(underEdit())}
+                >
+                  Edit
+                </button>
+              </Link>
+            </div>
+            <ConfirmDelete />
+          </>
         ) : null}
         <ReactMarkdown>{article?.body!}</ReactMarkdown>
       </div>

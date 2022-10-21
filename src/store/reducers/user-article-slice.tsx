@@ -1,15 +1,19 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 import {
   UserArticleInitialType,
   NewArticleType,
   PublishedArticle,
+  DeleteArticleType,
 } from "../../types/types";
 
 const initialState: UserArticleInitialType = {
-  isModalVisible: true,
+  isModalVisible: false,
   isArticlePublished: "idle",
   isArticleUpdated: "idle",
+  isArticleDeleted: "idle",
+  isEdit: false,
   error: null,
 };
 // создание новой статьи
@@ -22,7 +26,6 @@ export const publishArticle = createAsyncThunk<
   async ({ title, description, text, tags, token }, { rejectWithValue }) => {
     const BASE_URL = "https://blog.kata.academy/api";
     try {
-      console.log(title, description, text, token);
       const response: any = await fetch(`${BASE_URL}/articles`, {
         method: "POST",
         headers: {
@@ -39,7 +42,6 @@ export const publishArticle = createAsyncThunk<
           },
         }),
       });
-      console.log("post-edit response", response);
       if (!response.ok) {
         throw new Error(
           "service is unavailable. Please try again reloading your web-page!",
@@ -50,7 +52,6 @@ export const publishArticle = createAsyncThunk<
         throw new Error("Something went wrong. Please give another try");
       }
       const json = response.json();
-      console.log("return from create", json);
       return json;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -58,7 +59,7 @@ export const publishArticle = createAsyncThunk<
   },
 );
 
-// внести правки в статью
+// внесение правок в статью
 export const updateArticle = createAsyncThunk<
   PublishedArticle,
   NewArticleType,
@@ -68,7 +69,6 @@ export const updateArticle = createAsyncThunk<
   async ({ title, description, text, slug, token }, { rejectWithValue }) => {
     const BASE_URL = "https://blog.kata.academy/api";
     try {
-      console.log(title, description, text, token);
       const response: any = await fetch(`${BASE_URL}/articles/${slug}`, {
         method: "PUT",
         headers: {
@@ -84,7 +84,6 @@ export const updateArticle = createAsyncThunk<
           },
         }),
       });
-      console.log("post-edit response", response);
       if (!response.ok) {
         throw new Error(
           "service is unavailable. Please try again reloading your web-page!",
@@ -95,7 +94,6 @@ export const updateArticle = createAsyncThunk<
         throw new Error("Something went wrong. Please give another try");
       }
       const json = response.json();
-      console.log("return from create", json);
       return json;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -103,20 +101,58 @@ export const updateArticle = createAsyncThunk<
   },
 );
 
+// удаление статьи
+export const deleteArticle = createAsyncThunk<
+  PublishedArticle,
+  DeleteArticleType,
+  { rejectValue: string }
+>("userArticle/deleteArticle", async ({ slug, token }, { rejectWithValue }) => {
+  const BASE_URL = "https://blog.kata.academy/api";
+  try {
+    const response: any = await fetch(`${BASE_URL}/articles/${slug}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Token ${token}`,
+        // Accept: "application/json",
+        // "Content-Type": "application/json",
+      },
+    });
+    console.log("response in delete", response);
+    if (!response.ok) {
+      throw new Error(
+        "service is unavailable. Please try again reloading your web-page!",
+      );
+    }
+
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const articleSlice = createSlice({
   name: "userArticle",
   initialState,
   reducers: {
-    showModal() {},
+    showModal(state) {
+      state.isModalVisible = !state.isModalVisible;
+    },
+    underEdit(state) {
+      console.log("in edit");
+      state.isEdit = true;
+    },
+    underCreate(state) {
+      console.log("in create");
+      state.isEdit = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(publishArticle.pending, (state) => {
       state.isArticlePublished = "loading";
       state.error = null;
     });
-    builder.addCase(publishArticle.fulfilled, (state, action) => {
+    builder.addCase(publishArticle.fulfilled, (state) => {
       state.isArticlePublished = "succeeded";
-      console.log("publish succeeded", action.payload.article);
       state.error = null;
     });
     builder.addCase(publishArticle.rejected, (state) => {
@@ -129,15 +165,31 @@ const articleSlice = createSlice({
     });
     builder.addCase(updateArticle.fulfilled, (state, action) => {
       state.isArticleUpdated = "succeeded";
-      console.log("publish succeeded", action.payload.article);
+      console.log("upd article succeeded", action.payload.article);
       state.error = null;
     });
     builder.addCase(updateArticle.rejected, (state) => {
       state.isArticleUpdated = "failed";
       console.log(state.error);
     });
+    builder.addCase(deleteArticle.pending, (state) => {
+      state.isArticleDeleted = "loading";
+      console.log("delete pending");
+      state.error = null;
+    });
+    builder.addCase(deleteArticle.fulfilled, (state, action) => {
+      state.isArticleDeleted = "succeeded";
+      console.log("delete succeeded", action.payload);
+      const navigate = useNavigate();
+      navigate("/");
+      state.error = null;
+    });
+    builder.addCase(deleteArticle.rejected, (state) => {
+      state.isArticleDeleted = "failed";
+      console.log(state.error);
+    });
   },
 });
 
-export const { showModal } = articleSlice.actions;
+export const { showModal, underCreate, underEdit } = articleSlice.actions;
 export default articleSlice.reducer;

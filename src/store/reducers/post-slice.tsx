@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import axios from "axios";
 import { ArticleType, FetchPostsType, InitialState } from "../../types/types";
 
 const initialState: InitialState = {
@@ -33,7 +32,7 @@ export const fetchPosts = createAsyncThunk<FetchPostsType, number>(
     }
   },
 );
-// https://blog.kata.academy/api/articles/
+
 export const fetchArticle = createAsyncThunk<ArticleType, string>(
   "posts/fetchArticle",
   async function fetchSingleArticle(slug, { rejectWithValue }) {
@@ -46,7 +45,6 @@ export const fetchArticle = createAsyncThunk<ArticleType, string>(
         );
       }
       const data = await response.json();
-      console.log("data.article", data.article);
       return data.article;
     } catch (error: any) {
       return rejectWithValue(error.message);

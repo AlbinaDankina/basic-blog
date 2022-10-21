@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
 import { NewArticleType } from "../../types/types";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -9,46 +9,62 @@ import {
 } from "../../store/reducers/user-article-slice";
 
 function CreateAndEditArticle() {
-  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
-  console.log("isLoggedIn", isLoggedIn);
   const dispatch = useAppDispatch();
-  const { slug } = useParams();
+  const token = JSON.parse(localStorage.getItem("token")!);
+  const article = useAppSelector((state) => state.posts.article);
+  const slug = article?.slug;
+  const isEdit = useAppSelector((state) => state.article.isEdit);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
     reset,
+    formState: { errors },
   } = useForm<NewArticleType>({
     mode: "onChange",
   });
 
-  const token = JSON.parse(localStorage.getItem("token")!);
-  const article = useAppSelector((state) => state.posts.article);
-  console.log("article in edit", article);
-
-  console.log("SLUG", slug);
+  const headerName = isEdit ? `Edit article` : `Create new article`;
   const onSubmit: SubmitHandler<NewArticleType> = ({
     title,
     description,
     text,
     tags,
   }) => {
-    console.log(title, description, text, token, tags, slug);
-    if (!slug) {
-      dispatch(publishArticle({ title, description, text, slug, token }));
+    console.log(
+      "in create incoming data",
+      title,
+      description,
+      text,
+      slug,
+      token,
+    );
+    if (!isEdit) {
+      dispatch(publishArticle({ title, description, text, tags, token }));
+      reset();
     }
-    dispatch(updateArticle({ title, description, text, tags, token }));
-    reset();
+    if (isEdit) {
+      dispatch(updateArticle({ title, description, text, slug, token }));
+      reset();
+    }
   };
+
+  // обнуление полей при открытии страницы create new article:
+  useEffect(() => {
+    if (!isEdit) {
+      reset({
+        title: "",
+        description: "",
+        text: "",
+      });
+    }
+  }, [isEdit, reset]);
 
   return (
     <div className="new_article_wrapper">
       <div className="article new_article">
         <form className="entry_block-wrapper" onSubmit={handleSubmit(onSubmit)}>
-          <h2 className="entry_block-header">
-            {slug !== undefined ? `Edit article` : `Create new article`}
-          </h2>
+          <h2 className="entry_block-header">{headerName}</h2>
           <label className="label" htmlFor="title">
             Title
             <input
@@ -59,7 +75,7 @@ function CreateAndEditArticle() {
               type="text"
               id="title"
               placeholder="Title"
-              defaultValue={slug !== undefined ? article?.title : ""}
+              defaultValue={isEdit ? article?.title : ""}
             />
             <div className="label_error">
               {errors.title && <p>{errors.title.message}</p>}

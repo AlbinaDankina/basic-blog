@@ -3,18 +3,18 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logOut } from "../../store/reducers/user-slice";
 // import Spinner from "../spinner";
 import "./layout.scss";
+import { underCreate } from "../../store/reducers/user-article-slice";
+import profilePic from "../pages/img/alternative.jpg";
 
 function Layout() {
   const dispatch = useAppDispatch();
+  // const article = useAppSelector((state) => state.posts.article);
+  // const slug = article?.slug;
 
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const name = useAppSelector((state) => state.user.Username);
   const avatarSrc = useAppSelector((state) => state.user.avatar);
-  // const isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn")!);
-  // const name = JSON.parse(localStorage.getItem("username")!);
-  // const avatarSrc = JSON.parse(localStorage.getItem("avatar")!);
-
-  const isAuth = localStorage.getItem("token");
+  const isAuth = !!localStorage.getItem("token");
 
   if (isAuth && isLoggedIn === true) {
     return (
@@ -27,7 +27,11 @@ function Layout() {
               </span>
             </div>
             <div className="header_profile">
-              <button className="header_btn" type="button">
+              <button
+                className="header_btn"
+                type="button"
+                onClick={() => dispatch(underCreate())}
+              >
                 <Link to="/new-article">
                   <span>Create Article</span>
                 </Link>
@@ -35,7 +39,7 @@ function Layout() {
               <div className="header_user">{name}</div>
               <Link to="/profile">
                 <img
-                  src={avatarSrc !== null ? avatarSrc : "profile.png"}
+                  src={avatarSrc || profilePic}
                   alt=""
                   className="user_photo"
                 />
@@ -52,9 +56,6 @@ function Layout() {
             </div>
           </menu>
         </header>
-
-        {/* {areArticlesLoaded ? <Outlet /> : <Spinner />} */}
-        {/* <Spinner /> */}
         <Outlet />
       </>
     );
