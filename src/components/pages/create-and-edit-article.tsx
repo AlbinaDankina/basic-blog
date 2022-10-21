@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { Alert } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -15,6 +16,9 @@ function CreateAndEditArticle() {
   const article = useAppSelector((state) => state.posts.article);
   const slug = article?.slug;
   const isEdit = useAppSelector((state) => state.article.isEdit);
+  const isArticlePublished = useAppSelector(
+    (state) => state.article.isArticlePublished,
+  );
   const navigate = useNavigate();
   const {
     register,
@@ -32,24 +36,26 @@ function CreateAndEditArticle() {
     text,
     tags,
   }) => {
-    console.log(
-      "in create incoming data",
-      title,
-      description,
-      text,
-      slug,
-      token,
-    );
     if (!isEdit) {
       dispatch(publishArticle({ title, description, text, tags, token }));
+      navigate("/");
       reset();
     }
     if (isEdit) {
       dispatch(updateArticle({ title, description, text, slug, token }));
+      navigate("/");
       reset();
     }
   };
 
+  const notification = (
+    <Alert type="success" message="Your article has been published" />
+  );
+  console.log(notification);
+  console.log("publ", isArticlePublished);
+  // if (isArticlePublished) {
+  //   setTimeout(() => notification, 5000);
+  // }
   // обнуление полей при открытии страницы create new article:
   useEffect(() => {
     if (!isEdit) {
@@ -144,7 +150,7 @@ function CreateAndEditArticle() {
               className="btn btn-sent"
               type="submit"
               value="Send"
-              onClick={() => navigate("/")}
+              // onClick={() => navigate("/")}
             />
           </div>
         </form>

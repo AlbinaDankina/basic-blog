@@ -1,33 +1,29 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import uniqid from "uniqid";
-import ReactMarkdown from "react-markdown";
 // import { useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { showModal, underEdit } from "../../store/reducers/user-article-slice";
 import ConfirmDelete from "../popup/confirm-delete";
 import profilePic from "./img/alternative.jpg";
+// import { fetchArticle } from "../../store/reducers/post-slice";
 
 function ArticleContent() {
+  // const { slug } = useParams<string | undefined>();
+  // console.log(slug);
   const dispatch = useAppDispatch();
+  // useEffect(() => dispatch(fetchArticle(slug)), []);
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const article = useAppSelector((state) => state.posts.article);
   const slug = article?.slug;
-  const isArticlePublished = useAppSelector(
-    (state) => state.article.isArticlePublished,
-  );
   const tagUnit = article?.tagList.map((el) => (
     <div key={uniqid()} className="articles_item-content-tags-item">
       {el}
     </div>
   ));
-  console.log("isArticlePublished", isArticlePublished);
-  // console.log("isArticleDeleted", isArticleDeleted);
   if (!article?.updatedAt) return null;
-
-  // useEffect(() => {
-  //   if (isArticleDeleted === ("succeeded" || "loading")) navigate("/");
-  // }, [isArticleDeleted]);
+  // const user = useAppSelector((state) => state.user.Username);
 
   const year = new Date(article!.updatedAt).getFullYear();
   const day = new Date(article!.updatedAt).getDate();

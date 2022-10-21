@@ -154,6 +154,7 @@ const articleSlice = createSlice({
     builder.addCase(publishArticle.fulfilled, (state) => {
       state.isArticlePublished = "succeeded";
       state.error = null;
+      console.log("publish success");
     });
     builder.addCase(publishArticle.rejected, (state) => {
       state.isArticlePublished = "failed";
@@ -174,16 +175,10 @@ const articleSlice = createSlice({
     });
     builder.addCase(deleteArticle.pending, (state) => {
       state.isArticleDeleted = "loading";
-      // const navigate = useNavigate();
-      // navigate("/articles");
-      console.log("delete pending");
       state.error = null;
     });
-    builder.addCase(deleteArticle.fulfilled, (state, action) => {
+    builder.addCase(deleteArticle.fulfilled, (state) => {
       state.isArticleDeleted = "succeeded";
-      console.log("delete succeeded", action.payload);
-      // const navigate = useNavigate();
-      // navigate("/articles");
       state.error = null;
     });
     builder.addCase(deleteArticle.rejected, (state) => {

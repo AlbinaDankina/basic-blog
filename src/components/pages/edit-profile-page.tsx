@@ -18,24 +18,13 @@ function EditProfile() {
     mode: "onChange",
   });
 
-  let item: JSX.Element | null = null;
+  const item: JSX.Element | null = null;
   const token = JSON.parse(localStorage.getItem("token")!);
   const updateStatus = useAppSelector((state) => state.user.updateStatus);
 
   // сбор введенных в инпуты данных пользователя + POST-запрос с этими данными
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const { Username, Email, password, avatar } = data;
-    console.log("editpage", Username, Email, password, avatar);
-    if (
-      Username?.length === 0 &&
-      Email?.length === 0 &&
-      password?.length === 0 &&
-      avatar?.length === 0
-    ) {
-      item = <Alert message="нет данных для обновления" type="info" />;
-      return item;
-    }
-    console.log("data from edit", data, token);
     dispatch(editProfile({ Username, Email, password, avatar, token }));
     reset();
     return item;
@@ -50,6 +39,7 @@ function EditProfile() {
             Username
             <input
               {...register("Username", {
+                required: "необходимо заполнить",
                 minLength: {
                   value: 3,
                   message:
@@ -74,6 +64,7 @@ function EditProfile() {
             Email address
             <input
               {...register("Email", {
+                required: "необходимо заполнить",
                 pattern: {
                   value: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
                   message: "email должен быть корректным почтовым адресом",
@@ -92,6 +83,7 @@ function EditProfile() {
             New Password
             <input
               {...register("password", {
+                required: "необходимо заполнить",
                 minLength: {
                   value: 6,
                   message: "пароль должен быть от 6 до 40 символов",
@@ -114,6 +106,7 @@ function EditProfile() {
             Avatar image (url)
             <input
               {...register("avatar", {
+                required: "необходимо заполнить",
                 pattern: {
                   value: /(https?:\/\/.*\.(?:png|jpg))/i,
                   message: "URL должен быть корректным",

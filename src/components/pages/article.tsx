@@ -28,6 +28,7 @@ function Article({ item }: { item: ArticleType }) {
           <Link
             to={`articles/${item.slug}`}
             onClick={() => dispatch(fetchArticle(item.slug))}
+            // onClick={navigate(`/articles/:${slug}`)}
           >
             <h2>{item.title ? item.title : <span>Без названия</span>}</h2>
           </Link>

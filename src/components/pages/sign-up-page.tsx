@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Alert } from "antd";
 import "antd/dist/antd.min.css";
 import { SubmitHandler, useForm } from "react-hook-form";
+// import { useEffect } from "react";
 import { FormValues } from "../../types/types";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { postNewUser } from "../../store/reducers/user-slice";
@@ -35,6 +36,19 @@ function SignUp() {
 
   // const isAuth = !!localStorage.getItem("token");
   const password = watch("password");
+  // useEffect(() => {
+  //   const alert = setTimeout(() => {
+  //     if (status === "succeeded") {
+  //       <Alert
+  //         message="Регистрация прошла успешно"
+  //         type="success"
+  //         style={{ margin: "20px auto" }}
+  //       />;
+  //     }
+  //   });
+  // }, [status]);
+
+  console.log("alert", alert);
 
   return (
     <div className="entry_container">
@@ -153,6 +167,7 @@ function SignUp() {
             Already have an account? <Link to="/sign-in">Sign in</Link>
           </p>
         </form>
+        {/* {alert} */}
         {status === "succeeded" ? (
           <>
             <Alert

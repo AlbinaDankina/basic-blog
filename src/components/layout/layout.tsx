@@ -1,7 +1,11 @@
 import { Outlet, Link } from "react-router-dom";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { logOut, logIn } from "../../store/reducers/user-slice";
+import {
+  logOut,
+  logIn,
+  getLoggedInUser,
+} from "../../store/reducers/user-slice";
 // import Spinner from "../spinner";
 import "./layout.scss";
 import { underCreate } from "../../store/reducers/user-article-slice";
@@ -9,21 +13,27 @@ import profilePic from "../pages/img/alternative.jpg";
 
 function Layout() {
   const dispatch = useAppDispatch();
-  // const article = useAppSelector((state) => state.posts.article);
-  // const slug = article?.slug;
-
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const name = useAppSelector((state) => state.user.Username);
   const avatarSrc = useAppSelector((state) => state.user.avatar);
-  // const isAuth = !!localStorage.getItem("token");
 
   // залогинивание пользователя при f5
-  useEffect(() => {
-    const isAuth = !!localStorage.getItem("token");
-    if (isAuth) {
-      dispatch(logIn());
-    }
-  }, []);
+  // useEffect(() => {
+  //   const isAuth = !!localStorage.getItem("token");
+  //   if (isAuth) {
+  //     dispatch(logIn());
+  //     dispatch(getLoggedInUser());
+  //   }
+  // }, [dispatch]);
+
+  // useEffect(() => {
+  //   dispatch(getLoggedInUser());
+  // }, []);
+  const isAuth = !!localStorage.getItem("token");
+  if (isAuth) {
+    dispatch(logIn());
+    dispatch(getLoggedInUser());
+  }
 
   if (isLoggedIn) {
     return (
