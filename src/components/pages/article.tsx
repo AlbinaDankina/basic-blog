@@ -15,7 +15,6 @@ function Article({ item }: { item: ArticleType }) {
   const month = new Date(item.updatedAt).toLocaleString("default", {
     month: "long",
   });
-
   const tagUnit = item.tagList.map((el) => (
     <div key={uniqid()} className="articles_item-content-tags-item">
       {el}

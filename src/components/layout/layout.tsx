@@ -1,4 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   logOut,
@@ -17,10 +18,12 @@ function Layout() {
 
   // залогинивание пользователя при f5
   const isAuth = !!localStorage.getItem("token");
-  if (isAuth) {
-    dispatch(logIn());
-    dispatch(getLoggedInUser());
-  }
+  useEffect(() => {
+    if (isAuth) {
+      dispatch(logIn());
+      dispatch(getLoggedInUser());
+    }
+  }, [isAuth]);
 
   // вид для залогиненного пользователя
   if (isLoggedIn) {

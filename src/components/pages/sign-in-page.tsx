@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "antd";
+import { useEffect } from "react";
 import "antd/dist/antd.min.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -30,7 +31,11 @@ function SignIn() {
     reset();
   };
 
-  if (isLoggedIn) navigate("/");
+  useEffect(() => {
+    if (isLoggedIn) navigate("/");
+  }, [isLoggedIn]);
+
+  // if (isLoggedIn) navigate("/");
   return (
     <div className="entry_container">
       <div className="entry_block">
