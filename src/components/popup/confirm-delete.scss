@@ -1,8 +1,8 @@
 .modal {
     background-color: #FFFFFF;
     position: absolute;
-    top: 5.4em;
-    right: -9.5em;
+    // top: 5.4em;
+    // right: -9.5em;
     width: 240px;
     height: 104px;
     padding: 12px 16px 48px 40px;    
@@ -60,4 +60,25 @@
  
 .modal.active {
   transform: scale(1);
+}
+
+@media (min-width: 1300px) {
+  .modal {
+    top: 5.4em;
+    right: -9.5em;
+  }
+}
+
+@media (max-width: 1299px) {
+  .modal {
+    right: -7em;
+    top: 8em;
+  }
+}
+
+@media (max-width: 1140px) {
+  .modal {
+    right: 0em;
+    top: 8em;
+  }
 }

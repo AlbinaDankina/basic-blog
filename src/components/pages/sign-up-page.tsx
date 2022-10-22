@@ -1,16 +1,13 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { Link } from "react-router-dom";
-// import { Alert } from "antd";
-// import { useEffect } from "react";
 import "antd/dist/antd.min.css";
 import { SubmitHandler, useForm } from "react-hook-form";
-// import { useEffect } from "react";
 import { FormValues } from "../../types/types";
 import { useAppDispatch } from "../../store/hooks";
 import { postNewUser } from "../../store/reducers/user-slice";
 
 function SignUp() {
   const dispatch = useAppDispatch();
-  // const status = useAppSelector((state) => state.user.status);
   // валидация формы входа
   const {
     register,
@@ -33,27 +30,11 @@ function SignUp() {
     reset();
   };
 
-  // const isAuth = !!localStorage.getItem("token");
   const password = watch("password");
-  // const alert = useEffect(() => {
-  //   setTimeout(() => {
-  //     if (status === "succeeded") {
-  //       <Alert
-  //         message="Регистрация прошла успешно"
-  //         type="success"
-  //         style={{ margin: "20px auto" }}
-  //       />;
-  //     }
-  //   }, 1000);
-  //   // return clearTimeout(alert);
-  // }, [status]);
-
-  console.log("alert", alert);
 
   return (
     <div className="entry_container">
       <div className="entry_block">
-        {/* <> */}
         <form className="entry_block-wrapper" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="entry_block-header">Create new account</h2>
           <label className="label" htmlFor="username">
@@ -76,6 +57,11 @@ function SignUp() {
               type="text"
               id="username"
               placeholder="Username"
+              style={
+                errors.Username?.message
+                  ? { border: "1px solid red" }
+                  : { border: "1px solid green" }
+              }
             />
             <div className="label_error">
               {errors.Username && (
@@ -97,6 +83,11 @@ function SignUp() {
               type="email"
               id="email"
               placeholder="Email address"
+              style={
+                errors.Email?.message
+                  ? { border: "1px solid red" }
+                  : { border: "1px solid green" }
+              }
             />
             <div className="label_error">
               {errors.Email && <p>{errors.Email.message || "*required"}</p>}
@@ -122,6 +113,11 @@ function SignUp() {
               type="password"
               id="password"
               placeholder="Password"
+              style={
+                errors.password?.message
+                  ? { border: "1px solid red" }
+                  : { border: "1px solid green" }
+              }
             />
             <div className="label_error">
               {errors.password && (
@@ -141,6 +137,11 @@ function SignUp() {
               type="password"
               id="repeat"
               placeholder="Password"
+              style={
+                errors.confirmPassword?.message
+                  ? { border: "1px solid red" }
+                  : { border: "1px solid green" }
+              }
             />
             <div className="label_error">
               {errors.confirmPassword && (
@@ -167,31 +168,6 @@ function SignUp() {
             Already have an account? <Link to="/sign-in">Sign in</Link>
           </p>
         </form>
-        {/* {alert}
-        </> */}
-        {/* {status === "succeeded" ? (
-          <>
-            <Alert
-              message="Регистрация прошла успешно"
-              type="success"
-              style={{ margin: "20px auto" }}
-            />
-            <div
-              style={{
-                margin: "20px auto",
-                color: "black",
-                fontSize: "14px",
-                fontWeight: "500",
-                width: "280px",
-              }}
-            >
-              Перейти на страницу{" "}
-              <Link to="/sign-in" style={{ color: "blue", cursor: "pointer" }}>
-                входа
-              </Link>
-            </div>
-          </>
-        ) : null} */}
       </div>
     </div>
   );

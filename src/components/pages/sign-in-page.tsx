@@ -52,20 +52,19 @@ function SignIn() {
                   message: "email должен быть корректным почтовым адресом",
                 },
               })}
-              style={{
-                border:
-                  errors.Email && status === "failed"
-                    ? "0.5px solid red"
-                    : "0.5px solid green",
-              }}
               className="input"
               type="email"
               id="email"
               placeholder="Email address"
               required
+              style={
+                errors.Email?.message
+                  ? { border: "1px solid red" }
+                  : { border: "1px solid green" }
+              }
             />
             <div className="label_error">
-              {errors.Email && <p>{errors.Email.message || "*required"}</p>}
+              {errors.Email && <p>{errors.Email.message}</p>}
             </div>
           </label>
           <label className="label" htmlFor="password">
@@ -80,11 +79,14 @@ function SignIn() {
               id="password"
               placeholder="Password"
               required
+              style={
+                errors.password?.message
+                  ? { border: "1px solid red" }
+                  : { border: "1px solid green" }
+              }
             />
             <div className="label_error">
-              {errors.password && (
-                <p>{errors.password.message || "*required"}</p>
-              )}
+              {errors.password && <p>{errors.password.message}</p>}
             </div>
           </label>
           <input

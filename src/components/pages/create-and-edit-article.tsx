@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Alert } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -16,9 +15,6 @@ function CreateAndEditArticle() {
   const article = useAppSelector((state) => state.posts.article);
   const slug = article?.slug;
   const isEdit = useAppSelector((state) => state.article.isEdit);
-  const isArticlePublished = useAppSelector(
-    (state) => state.article.isArticlePublished,
-  );
   const navigate = useNavigate();
   const {
     register,
@@ -48,11 +44,6 @@ function CreateAndEditArticle() {
     }
   };
 
-  const notification = (
-    <Alert type="success" message="Your article has been published" />
-  );
-  console.log(notification);
-  console.log("publ", isArticlePublished);
   // обнуление полей при открытии страницы create new article:
   useEffect(() => {
     if (!isEdit) {
@@ -143,12 +134,7 @@ function CreateAndEditArticle() {
                 </div>
               </div>
             </label>
-            <input
-              className="btn btn-sent"
-              type="submit"
-              value="Send"
-              // onClick={() => navigate("/")}
-            />
+            <input className="btn btn-sent" type="submit" value="Send" />
           </div>
         </form>
       </div>

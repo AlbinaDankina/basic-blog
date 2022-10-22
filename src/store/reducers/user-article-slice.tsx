@@ -48,12 +48,12 @@ export const publishArticle = createAsyncThunk<
         );
       }
 
-      if (response.status !== (200 || 201)) {
+      if (response.status !== (200 || 201 || 204)) {
         throw new Error(
           "Something went wrong. See details in NetWork page in DevTools in your browser",
         );
       }
-      const json = response.json();
+      const json = await response.json();
       return json;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -125,7 +125,8 @@ export const deleteArticle = createAsyncThunk<
         "Ooops, something happened while deletion. See details in NetWork page in DevTools in your browser",
       );
     }
-    return response;
+    const json = await response.json();
+    return json;
   } catch (error: any) {
     return rejectWithValue(error.message);
   }
