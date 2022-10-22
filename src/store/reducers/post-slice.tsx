@@ -1,18 +1,26 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { ArticleType, FetchPostsType, InitialState } from "../../types/types";
+import {
+  ArticleType,
+  FetchPostsType,
+  InitialState,
+  LikeResponseType,
+} from "../../types/types";
 
 const initialState: InitialState = {
   articles: [],
   article: null,
+  likes: {},
   articlesCount: 0,
   currentPage: 0,
   articlesPerPage: 20,
+  favorited: false,
+  favoritesCount: 0,
   isLoading: true,
   status: null,
   error: null,
 };
-
 export const fetchPosts = createAsyncThunk<FetchPostsType, number>(
   "posts/fetchPosts",
   async function fetchArticles(pageNumber, { rejectWithValue }) {
@@ -52,6 +60,57 @@ export const fetchArticle = createAsyncThunk<ArticleType, string>(
   },
 );
 
+export const likePost = createAsyncThunk<LikeResponseType, string>(
+  "posts/likePost",
+  async (slug, { rejectWithValue }) => {
+    const BASE_URL = "https://blog.kata.academy/api";
+    try {
+      const token = JSON.parse(localStorage.getItem("token")!);
+      const response = await fetch(`${BASE_URL}/articles/${slug}/favorite`, {
+        method: "POST",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("error in like adding");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+export const dislikePost = createAsyncThunk<LikeResponseType, string>(
+  "posts/dislikePost",
+  async (slug, { rejectWithValue }) => {
+    const BASE_URL = "https://blog.kata.academy/api";
+    try {
+      const token = JSON.parse(localStorage.getItem("token")!);
+      const response: any = await fetch(
+        `${BASE_URL}/articles/${slug}/favorite`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      if (!response.ok) {
+        throw new Error("error in like adding");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
 const postsSlice = createSlice({
   name: "articles",
   initialState,
@@ -76,6 +135,10 @@ const postsSlice = createSlice({
       state.articles = action.payload.articles;
       state.articlesCount = action.payload.articlesCount;
       state.error = null;
+      action.payload.articles.forEach((arr) => {
+        const id = arr.slug;
+        state.likes[id] = arr.favoritesCount;
+      });
     });
     builder.addCase(fetchPosts.rejected, (state, action) => {
       state.status = "rejected";
@@ -88,7 +151,6 @@ const postsSlice = createSlice({
     });
     builder.addCase(fetchArticle.fulfilled, (state, action) => {
       state.status = "resolved";
-      console.log("fetchArticle", action.payload);
       state.article = action.payload;
       state.error = null;
     });
@@ -96,6 +158,42 @@ const postsSlice = createSlice({
       state.status = "rejected";
       state.error = action.payload;
       console.log(state.error);
+    });
+    builder.addCase(likePost.fulfilled, (state, action) => {
+      state.status = "resolved";
+      state.favorited = true;
+      state.favoritesCount = action.payload.article.favoritesCount;
+      state.error = null;
+      const likedSlug = Object.keys(state.likes).filter((el) => {
+        if (el === action.payload.article.slug) {
+          return el;
+        }
+        return null;
+      });
+      state.likes[likedSlug.join()] += 1;
+    });
+    builder.addCase(likePost.rejected, (state, action) => {
+      state.status = "rejected";
+      state.error = action.payload;
+      console.log("error while liking", state.status);
+    });
+    builder.addCase(dislikePost.fulfilled, (state, action) => {
+      state.status = "resolved";
+      state.favorited = false;
+      state.favoritesCount = action.payload.article.favoritesCount;
+      state.error = null;
+      const dislikedSlug = Object.keys(state.likes).filter((el) => {
+        if (el === action.payload.article.slug) {
+          return el;
+        }
+        return null;
+      });
+      state.likes[dislikedSlug.join()] -= 1;
+    });
+    builder.addCase(dislikePost.rejected, (state, action) => {
+      state.status = "rejected";
+      state.error = action.payload;
+      console.log("error while disliking", state.status);
     });
   },
 });

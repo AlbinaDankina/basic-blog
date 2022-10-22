@@ -142,7 +142,6 @@ const articleSlice = createSlice({
       state.isEdit = true;
     },
     underCreate(state) {
-      console.log("in create");
       state.isEdit = false;
     },
   },

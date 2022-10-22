@@ -20,12 +20,38 @@ export type ArticleType = {
   updatedAt: string;
 };
 
+export type LikeResponseType = {
+  article: {
+    slug: string;
+    title: string;
+    description: string;
+    body: string;
+    tagList: [string];
+    createdAt: string;
+    updatedAt: string;
+    favorited: boolean;
+    favoritesCount: number | null | undefined;
+    author: {
+      username: string;
+      bio: string;
+      image: string;
+      following: boolean;
+    };
+  };
+};
+
 export type InitialState = {
   articles: ArticleType[];
   article: ArticleType | null;
+  likes:
+    | {
+        [id in any]: number;
+      };
   articlesCount: number;
   currentPage: number;
   articlesPerPage: number;
+  favorited?: boolean;
+  favoritesCount?: number | null | undefined;
   isLoading: boolean;
   status: string | null;
   error: unknown | null;

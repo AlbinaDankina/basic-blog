@@ -53,9 +53,6 @@ function CreateAndEditArticle() {
   );
   console.log(notification);
   console.log("publ", isArticlePublished);
-  // if (isArticlePublished) {
-  //   setTimeout(() => notification, 5000);
-  // }
   // обнуление полей при открытии страницы create new article:
   useEffect(() => {
     if (!isEdit) {

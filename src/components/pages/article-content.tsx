@@ -1,23 +1,29 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import uniqid from "uniqid";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { showModal, underEdit } from "../../store/reducers/user-article-slice";
 import ConfirmDelete from "../popup/confirm-delete";
 import profilePic from "./img/alternative.jpg";
-// import { fetchArticle } from "../../store/reducers/post-slice";
+import {
+  likePost,
+  dislikePost,
+  fetchArticle,
+} from "../../store/reducers/post-slice";
 
 function ArticleContent() {
-  // const { slug } = useParams<string | undefined>();
-  // console.log(slug);
+  const favorited = useAppSelector((state) => state.posts.favorited);
+  const favoritesCount = useAppSelector((state) => state.posts.favoritesCount);
   const dispatch = useAppDispatch();
-  // useEffect(() => dispatch(fetchArticle(slug)), []);
+  const { slug } = useParams<{ slug?: string | undefined }>();
+  useEffect(() => {
+    dispatch(fetchArticle(slug!));
+  }, [favoritesCount]);
   const user = useAppSelector((state) => state.user.Username);
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const article = useAppSelector((state) => state.posts.article);
-  const slug = article?.slug;
   const tagUnit = article?.tagList.map((el) => (
     <div key={uniqid()} className="articles_item-content-tags-item">
       {el}
@@ -31,6 +37,17 @@ function ArticleContent() {
     month: "long",
   });
 
+  // функционал лайков - дублируется в компоненте article,
+  // т.к.из - за присутствия dispatch не вынести логику в отдельный файл
+  const toggleLike = () => {
+    if (favorited === false) {
+      dispatch(likePost(slug!));
+    }
+    if (favorited === true) {
+      dispatch(dislikePost(slug!));
+    }
+  };
+
   return (
     <div style={{ margin: "20px" }}>
       <div className="article">
@@ -39,7 +56,13 @@ function ArticleContent() {
             <div className="article_content-wrapper">
               <div className="articles_item-content-header">
                 <h2>{article?.title}</h2>
-                <div className="articles_item-content-likes">12</div>
+                <button
+                  onClick={toggleLike}
+                  className="articles_item-content-likes"
+                  type="button"
+                >
+                  {article?.favoritesCount}
+                </button>
               </div>
               <div className="articles_item-content-tags">{tagUnit}</div>
             </div>
