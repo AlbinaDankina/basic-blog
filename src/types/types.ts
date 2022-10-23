@@ -103,6 +103,7 @@ export type MyKnownError = {
 };
 
 export type UserArticleInitialType = {
+  tags: string[];
   isModalVisible: boolean;
   isArticlePublished: "idle" | "loading" | "succeeded" | "failed";
   isArticleUpdated: "idle" | "loading" | "succeeded" | "failed";
@@ -115,7 +116,8 @@ export type NewArticleType = {
   title: string;
   description: string;
   text: string;
-  tags?: [string];
+  tags?: { value: string }[];
+  tagsForSubmit?: string[];
   slug?: string;
   token: string | null;
 };

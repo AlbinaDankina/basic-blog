@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, useFieldArray } from "react-hook-form";
 import { NewArticleType } from "../../types/types";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
   publishArticle,
   updateArticle,
@@ -11,29 +11,37 @@ import {
 
 function CreateAndEditArticle() {
   const dispatch = useAppDispatch();
-  const token = JSON.parse(localStorage.getItem("token")!);
+  // const token = JSON.parse(localStorage.getItem("token")!);
   const article = useAppSelector((state) => state.posts.article);
+  // const tagsList = useAppSelector((state) => state.article.tags);
   const slug = article?.slug;
+  const token = JSON.parse(localStorage.getItem("token")!);
   const isEdit = useAppSelector((state) => state.article.isEdit);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<NewArticleType>({
     mode: "onChange",
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "tags",
+  });
   const headerName = isEdit ? `Edit article` : `Create new article`;
-  const onSubmit: SubmitHandler<NewArticleType> = ({
-    title,
-    description,
-    text,
-    tags,
-  }) => {
+  const onSubmit: SubmitHandler<NewArticleType> = (data) => {
+    const { title, description, text, tags } = data;
+    // получить из массива объектов tags - массив строк для последующей передачи в запрос на публикацию
+    const tagsForSubmit = tags?.map((el) => el.value);
+
     if (!isEdit) {
-      dispatch(publishArticle({ title, description, text, tags, token }));
+      dispatch(
+        publishArticle({ title, description, text, tagsForSubmit, token }),
+      );
       navigate("/");
       reset();
     }
@@ -110,30 +118,41 @@ function CreateAndEditArticle() {
             </div>
           </label>
           <div className="new_article-tags">
-            <label className="label" htmlFor="tags">
+            <div className="label">
               <span>Tags</span>
               <div className="label_inputs">
-                <input
-                  {...register("tags")}
-                  className="input"
-                  type="text"
-                  id="tags"
-                  placeholder="Tag"
-                />
                 <div className="new_article-buttons">
-                  <input
-                    className="btn btn-delete"
-                    type="button"
-                    value="Delete"
-                  />
                   <input
                     className="btn btn-add"
                     type="button"
                     value="Add tag"
+                    onClick={() => {
+                      append({ value: "" });
+                    }}
                   />
                 </div>
               </div>
-            </label>
+              {fields.map((field, index) => (
+                <div key={field.id} className="label_inputs">
+                  <input
+                    {...register(`tags.${index}.value` as const)}
+                    className="input"
+                    type="text"
+                    id="tags"
+                    placeholder="Tag"
+                    defaultValue={`tags.${index}`}
+                  />
+                  <div className="new_article-buttons">
+                    <input
+                      className="btn btn-delete"
+                      type="button"
+                      value="Delete"
+                      onClick={() => remove(index)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
             <input className="btn btn-sent" type="submit" value="Send" />
           </div>
         </form>

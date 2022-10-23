@@ -9,6 +9,7 @@ import {
 } from "../../types/types";
 
 const initialState: UserArticleInitialType = {
+  tags: [],
   isModalVisible: false,
   isArticlePublished: "idle",
   isArticleUpdated: "idle",
@@ -23,7 +24,10 @@ export const publishArticle = createAsyncThunk<
   { rejectValue: string }
 >(
   "userArticle/publishArticle",
-  async ({ title, description, text, tags, token }, { rejectWithValue }) => {
+  async (
+    { title, description, text, tagsForSubmit, token },
+    { rejectWithValue },
+  ) => {
     const BASE_URL = "https://blog.kata.academy/api";
     try {
       const response: any = await fetch(`${BASE_URL}/articles`, {
@@ -38,7 +42,7 @@ export const publishArticle = createAsyncThunk<
             title,
             description,
             body: text,
-            tagList: tags,
+            tagList: tagsForSubmit,
           },
         }),
       });
@@ -119,7 +123,6 @@ export const deleteArticle = createAsyncThunk<
         Authorization: `Token ${token}`,
       },
     });
-    console.log("response in delete", response);
     if (!response.ok) {
       throw new Error(
         "Ooops, something happened while deletion. See details in NetWork page in DevTools in your browser",
@@ -145,6 +148,18 @@ const articleSlice = createSlice({
     underCreate(state) {
       state.isEdit = false;
     },
+    // // addField(state, action) {
+    // //   console.log("action.payload", action.payload);
+    // //   state.tags = [...state.tags, action.payload];
+    // //   const newfield = "";
+    // //   console.log("newField", newfield);
+    // //   const newTagsArr = [...state.tags, newfield];
+    // //   console.log("newTagsArr>>", newTagsArr);
+    // //   state.tags = newTagsArr;
+    // // },
+    // deleteField(state) {
+    //   state.tags = state.tags.slice(0, state.tags.length - 2);
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(publishArticle.pending, (state) => {
@@ -154,7 +169,6 @@ const articleSlice = createSlice({
     builder.addCase(publishArticle.fulfilled, (state) => {
       state.isArticlePublished = "succeeded";
       state.error = null;
-      console.log("publish success");
     });
     builder.addCase(publishArticle.rejected, (state) => {
       state.isArticlePublished = "failed";
