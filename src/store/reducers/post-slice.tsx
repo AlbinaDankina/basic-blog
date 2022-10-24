@@ -11,6 +11,7 @@ import {
 const initialState: InitialState = {
   articles: [],
   article: null,
+  taglist: [],
   likes: {},
   articlesCount: 0,
   currentPage: 0,
@@ -124,6 +125,17 @@ const postsSlice = createSlice({
     setNextPage(state, action) {
       state.currentPage = action.payload + 1;
     },
+    // deleteTag(state, action) {
+    //   console.log("action.payload.index", action.payload);
+    //   const tagListAfterDelete = state.taglist.filter(
+    //     (el: string, id: number) => {
+    //       if (id !== action.payload) return el;
+    //       return null;
+    //     },
+    //   );
+    //   console.log("tagListAfterDelete", tagListAfterDelete);
+    //   state.taglist = tagListAfterDelete;
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPosts.pending, (state) => {
@@ -151,7 +163,9 @@ const postsSlice = createSlice({
     });
     builder.addCase(fetchArticle.fulfilled, (state, action) => {
       state.status = "resolved";
+      console.log("aaa", action.payload.tagList);
       state.article = action.payload;
+      state.taglist = action.payload.tagList;
       state.error = null;
     });
     builder.addCase(fetchArticle.rejected, (state, action) => {

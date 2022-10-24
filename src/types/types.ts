@@ -43,6 +43,7 @@ export type LikeResponseType = {
 export type InitialState = {
   articles: ArticleType[];
   article: ArticleType | null;
+  taglist: string[];
   likes:
     | {
         [id in any]: number;

@@ -72,7 +72,10 @@ export const updateArticle = createAsyncThunk<
   { rejectValue: string }
 >(
   "userArticle/updateArticle",
-  async ({ title, description, text, slug, token }, { rejectWithValue }) => {
+  async (
+    { title, description, text, slug, tagsForSubmit, token },
+    { rejectWithValue },
+  ) => {
     const BASE_URL = "https://blog.kata.academy/api";
     try {
       const response: any = await fetch(`${BASE_URL}/articles/${slug}`, {
@@ -87,6 +90,7 @@ export const updateArticle = createAsyncThunk<
             title,
             description,
             body: text,
+            tagList: tagsForSubmit,
           },
         }),
       });
@@ -148,18 +152,6 @@ const articleSlice = createSlice({
     underCreate(state) {
       state.isEdit = false;
     },
-    // // addField(state, action) {
-    // //   console.log("action.payload", action.payload);
-    // //   state.tags = [...state.tags, action.payload];
-    // //   const newfield = "";
-    // //   console.log("newField", newfield);
-    // //   const newTagsArr = [...state.tags, newfield];
-    // //   console.log("newTagsArr>>", newTagsArr);
-    // //   state.tags = newTagsArr;
-    // // },
-    // deleteField(state) {
-    //   state.tags = state.tags.slice(0, state.tags.length - 2);
-    // },
   },
   extraReducers: (builder) => {
     builder.addCase(publishArticle.pending, (state) => {

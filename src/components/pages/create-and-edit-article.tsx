@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +14,6 @@ function CreateAndEditArticle() {
   const dispatch = useAppDispatch();
   // const token = JSON.parse(localStorage.getItem("token")!);
   const article = useAppSelector((state) => state.posts.article);
-  // const tagsList = useAppSelector((state) => state.article.tags);
   const slug = article?.slug;
   const token = JSON.parse(localStorage.getItem("token")!);
   const isEdit = useAppSelector((state) => state.article.isEdit);
@@ -26,6 +26,11 @@ function CreateAndEditArticle() {
     formState: { errors },
   } = useForm<NewArticleType>({
     mode: "onChange",
+    defaultValues: {
+      tags: article?.tagList.map((item) => ({
+        value: `${item}`,
+      })),
+    },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -33,6 +38,7 @@ function CreateAndEditArticle() {
     name: "tags",
   });
   const headerName = isEdit ? `Edit article` : `Create new article`;
+  // обработка формы
   const onSubmit: SubmitHandler<NewArticleType> = (data) => {
     const { title, description, text, tags } = data;
     // получить из массива объектов tags - массив строк для последующей передачи в запрос на публикацию
@@ -46,7 +52,9 @@ function CreateAndEditArticle() {
       reset();
     }
     if (isEdit) {
-      dispatch(updateArticle({ title, description, text, slug, token }));
+      dispatch(
+        updateArticle({ title, description, text, slug, tagsForSubmit, token }),
+      );
       navigate("/");
       reset();
     }
