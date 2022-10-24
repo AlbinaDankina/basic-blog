@@ -17,6 +17,7 @@ function CreateAndEditArticle() {
   const slug = article?.slug;
   const token = JSON.parse(localStorage.getItem("token")!);
   const isEdit = useAppSelector((state) => state.article.isEdit);
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const navigate = useNavigate();
   const {
     register,
@@ -70,6 +71,8 @@ function CreateAndEditArticle() {
       });
     }
   }, [isEdit, reset]);
+
+  if (!isLoggedIn) navigate("/sign-in");
 
   return (
     <div className="new_article_wrapper">

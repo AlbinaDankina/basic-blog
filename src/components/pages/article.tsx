@@ -1,6 +1,6 @@
 import uniqid from "uniqid";
 import "./pages.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArticleType } from "../../types/types";
 import { truncate } from "../../logic/truncate-text";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -8,6 +8,8 @@ import { likePost, dislikePost } from "../../store/reducers/post-slice";
 
 function Article({ item }: { item: ArticleType }) {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const favorited = useAppSelector((state) => state.posts.favorited);
   const likes = useAppSelector((state) => state.posts.likes);
   const year = new Date(item.updatedAt).getFullYear();
@@ -24,6 +26,7 @@ function Article({ item }: { item: ArticleType }) {
   // функционал лайков - дублируется в компоненте articleContent,
   // т.к.из - за присутствия dispatch не вынести логику в отдельный файл
   const toggleLike = () => {
+    if (!isLoggedIn) navigate("/sign-in");
     if (favorited === false) {
       dispatch(likePost(item.slug));
     }
